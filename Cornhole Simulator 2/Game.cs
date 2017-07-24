@@ -64,7 +64,7 @@ namespace Cornhole_Simulator_2
                 g.DrawImage(blueBag, width - blueBag.Width - 2, 0 + (blueBag.Width * i + 25), blueBag.Width, blueBag.Height);
             }
 
-            //draw score
+            //draw scores
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(this.Font.FontFamily, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
         }
     }
