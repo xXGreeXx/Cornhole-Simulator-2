@@ -42,14 +42,14 @@ namespace Cornhole_Simulator_2
             Graphics g = e.Graphics;
             int width = canvas.Width;
             int height = canvas.Height;
-            float sizeOfBoard = 0.85F;
+            float sizeOfBoard = 0.95F;
 
             //draw background
             g.FillRectangle(Brushes.SkyBlue, 0, 0, width, 250);
             g.DrawImage(grass, 0, 250, width, height - 250);
 
             //draw board
-            g.DrawImage(board, width / 2 - board.Width * sizeOfBoard / 2, 240, board.Width * sizeOfBoard, board.Height * sizeOfBoard);
+            g.DrawImage(board, width / 2 - board.Width * sizeOfBoard / 2, 255, board.Width * sizeOfBoard, board.Height * sizeOfBoard);
 
             //draw bags left
             g.DrawRectangle(Pens.Black, 2, 25, 47, 203);
