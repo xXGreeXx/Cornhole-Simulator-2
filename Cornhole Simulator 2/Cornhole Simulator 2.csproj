@@ -111,6 +111,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="beanBagIcon.ico" />
+    <None Include="Resources\arm1.png" />
+    <None Include="Resources\arm2.png" />
     <None Include="Resources\redBag.png" />
     <None Include="Resources\blueBag.png" />
     <None Include="Resources\cornHoleBoard.png" />
