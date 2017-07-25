@@ -17,10 +17,14 @@ namespace Cornhole_Simulator_2
         Bitmap board = Cornhole_Simulator_2.Properties.Resources.cornHoleBoard;
         Bitmap blueBag = Cornhole_Simulator_2.Properties.Resources.blueBag;
         Bitmap redBag = Cornhole_Simulator_2.Properties.Resources.redBag;
+        Bitmap arm1 = Cornhole_Simulator_2.Properties.Resources.arm1;
+        Bitmap arm2 = Cornhole_Simulator_2.Properties.Resources.arm2;
         int amountOFBagsForPlayer1 = 4;
         int amountOfBagsForPlayer2 = 4;
         int player1Score = 0;
         int player2Score = 0;
+        int positionOfHandX = 0;
+        int positionOfHandY = 0;
 
         //initialize
         public Game()
@@ -66,6 +70,12 @@ namespace Cornhole_Simulator_2
 
             //draw scores
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(this.Font.FontFamily, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
+
+            //draw hand
+            Point[] pointsForArm1 = { new Point(width / 2 - arm1.Width / 2, height - arm1.Height), new Point(width / 2 + arm1.Width / 2, height - arm1.Height), new Point(width / 2 - arm1.Width / 2, height)};
+            Point[] pointsForArm2 = { new Point(), new Point(), new Point()};
+            g.DrawImage(arm1, pointsForArm1);
+            g.DrawImage(arm2, pointsForArm2);
         }
     }
 }
