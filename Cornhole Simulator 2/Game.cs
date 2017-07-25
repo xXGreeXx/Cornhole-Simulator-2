@@ -72,20 +72,20 @@ namespace Cornhole_Simulator_2
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(this.Font.FontFamily, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
             //draw hand
-            int topOfArm1 = height - arm1.Height + 50;
+            int topOfArm1 = height - arm1.Height + 100;
             int bottomOfArm1 = height;
 
-            int topOfArm2 = height - arm1.Height - 100;
+            int topOfArm2 = height - arm1.Height - 30;
             int bottomOfArm2 = topOfArm1;
 
             Point[] pointsForArm1 = {
-                new Point(width / 2 - arm1.Width / 2, topOfArm1),
-                new Point(width / 2 + arm1.Width / 2, topOfArm1),
+                new Point(width / 2 - arm1.Width / 2 - positionOfHandX, topOfArm1),
+                new Point(width / 2 + arm1.Width / 2 - positionOfHandX, topOfArm1),
                 new Point(width / 2 - arm1.Width / 2, bottomOfArm1)};
             Point[] pointsForArm2 = {
-                new Point(width / 2 - arm2.Width / 2, topOfArm2),
-                new Point(width / 2 + arm2.Width / 2, topOfArm2),
-                new Point(width / 2 - arm1.Width / 2 - 20, bottomOfArm2 + 10)};
+                new Point(width / 2 - arm2.Width / 2 - positionOfHandX, topOfArm2),
+                new Point(width / 2 + arm2.Width / 2 - positionOfHandX, topOfArm2),
+                new Point(width / 2 - arm1.Width / 2 - 20 - positionOfHandX, bottomOfArm2 + 10)};
 
             g.DrawImage(arm1, pointsForArm1);
             g.DrawImage(arm2, pointsForArm2);
@@ -99,6 +99,7 @@ namespace Cornhole_Simulator_2
             int width = canvas.Width;
             int height = canvas.Height;
 
+            positionOfHandX = width / 2 - x;
         }
     }
 }
