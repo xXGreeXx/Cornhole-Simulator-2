@@ -54,7 +54,7 @@ namespace Cornhole_Simulator_2
             float sizeOfBoard = 0.95F;
 
             //draw background
-            float positionOfSkyToGround = (250F / 770F) * canvas.Width;
+            float positionOfSkyToGround = (250F / 770F) * canvas.Height;
 
             g.FillRectangle(Brushes.SkyBlue, 0, 0, width, positionOfSkyToGround);
             g.DrawImage(grass, 0, positionOfSkyToGround, width, height - positionOfSkyToGround);
@@ -116,6 +116,16 @@ namespace Cornhole_Simulator_2
 
             g.DrawImage(arm1, pointsForArm1);
             g.DrawImage(arm2, pointsForArm2);
+
+            //Point[] pointsForBagInHand =
+            //{
+            //    new Point(width / 2 - arm2.Width / 2 - (int)(positionOfHandX * 2.5F), topOfArm2),
+            //    new Point(width / 2 + arm2.Width / 2 - (int)(positionOfHandX * 2.5F), topOfArm2),
+            //    new Point(width / 2 - arm1.Width / 2 - 20 - (int)(positionOfHandX * 2.5F), topOfArm2 + redBag.Width)
+            // };
+
+            //if (turn.Equals("player1")) { g.DrawImage(redBag, pointsForBagInHand); }
+            //else if (turn.Equals("player2")) { g.DrawImage(blueBag, pointsForBagInHand); }
         }
 
         //canvas mouse move
