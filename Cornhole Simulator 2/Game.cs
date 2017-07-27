@@ -25,6 +25,11 @@ namespace Cornhole_Simulator_2
         int player2Score = 0;
         int positionOfHandX = 0;
         int positionOfHandY = 0;
+        Boolean started = false;
+        int startedCycle = 0;
+        Boolean startedSwap = false;
+        String turn = "";
+        int turnFadeCycle = 255;
 
         //initialize
         public Game()
@@ -49,11 +54,32 @@ namespace Cornhole_Simulator_2
             float sizeOfBoard = 0.95F;
 
             //draw background
-            g.FillRectangle(Brushes.SkyBlue, 0, 0, width, 250);
-            g.DrawImage(grass, 0, 250, width, height - 250);
+            float positionOfSkyToGround = (250F / 770F) * canvas.Width;
+
+            g.FillRectangle(Brushes.SkyBlue, 0, 0, width, positionOfSkyToGround);
+            g.DrawImage(grass, 0, positionOfSkyToGround, width, height - positionOfSkyToGround);
 
             //draw board
-            g.DrawImage(board, width / 2 - board.Width * sizeOfBoard / 2, 255, board.Width * sizeOfBoard, board.Height * sizeOfBoard);
+            g.DrawImage(board, width / 2 - board.Width * sizeOfBoard / 2, positionOfSkyToGround + 5, board.Width * sizeOfBoard, board.Height * sizeOfBoard);
+
+            //draw not started text
+            if (!started)
+            {
+                if (!startedSwap) { g.DrawString("Click Anywhere To Begin", new Font(FontFamily.GenericSansSerif, 30, FontStyle.Bold), Brushes.Black, width / 2 - 225, 140); }
+
+                if (startedCycle >= 25) { startedSwap = true; }
+                else if (startedCycle <= 0) { startedSwap = false; }
+
+                if (startedSwap) { startedCycle--; }
+                else { startedCycle++; }   
+            }
+
+            //draw player turn text
+            if (turn.Equals("player1") && turnFadeCycle >= 4)
+            {
+                g.DrawString("Player One's Turn", new Font(FontFamily.GenericSansSerif, 30, FontStyle.Bold), new SolidBrush(Color.FromArgb(turnFadeCycle, Color.Red)), width / 2 - 165, 140);
+                turnFadeCycle -= 5;
+            }
 
             //draw bags left
             g.DrawRectangle(Pens.Black, 2, 25, 47, 203);
@@ -69,13 +95,14 @@ namespace Cornhole_Simulator_2
             }
 
             //draw scores
-            g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(this.Font.FontFamily, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
+            g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
             //draw hand
-            int topOfArm1 = height - arm1.Height + 100;
+            //TODO: make hand smaller, fix angle calculation, draw bag in hand, change hand perspective in engine\\
+            int topOfArm1 = height - arm1.Height + 150;
             int bottomOfArm1 = height;
 
-            int topOfArm2 = height - arm1.Height - 30;
+            int topOfArm2 = height - arm1.Height + 20;
             int bottomOfArm2 = topOfArm1;
 
             Point[] pointsForArm1 = {
@@ -83,8 +110,8 @@ namespace Cornhole_Simulator_2
                 new Point(width / 2 + arm1.Width / 2 - positionOfHandX, topOfArm1),
                 new Point(width / 2 - arm1.Width / 2, bottomOfArm1)};
             Point[] pointsForArm2 = {
-                new Point(width / 2 - arm2.Width / 2 - positionOfHandX, topOfArm2),
-                new Point(width / 2 + arm2.Width / 2 - positionOfHandX, topOfArm2),
+                new Point(width / 2 - arm2.Width / 2 - (int)(positionOfHandX * 2.5F), topOfArm2),
+                new Point(width / 2 + arm2.Width / 2 - (int)(positionOfHandX * 2.5F), topOfArm2),
                 new Point(width / 2 - arm1.Width / 2 - 20 - positionOfHandX, bottomOfArm2 + 10)};
 
             g.DrawImage(arm1, pointsForArm1);
@@ -99,7 +126,23 @@ namespace Cornhole_Simulator_2
             int width = canvas.Width;
             int height = canvas.Height;
 
-            positionOfHandX = width / 2 - x;
+            if (started)
+            {
+                positionOfHandX = width / 2 - x;
+            }
+        }
+
+        //canvas mouse down handler
+        private void canvas_MouseDown(object sender, MouseEventArgs e)
+        {
+            int x = e.X;
+            int y = e.Y;
+
+            if (!started)
+            {
+                started = true;
+                turn = "player1";
+            }
         }
     }
 }
