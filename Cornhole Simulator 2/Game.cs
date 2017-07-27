@@ -51,7 +51,13 @@ namespace Cornhole_Simulator_2
             Graphics g = e.Graphics;
             int width = canvas.Width;
             int height = canvas.Height;
-            float sizeOfBoard = 0.95F;
+
+            float amountToIncreaseSizeBy = 1.0F;
+
+            if (width > height) { amountToIncreaseSizeBy = ((float)canvas.Width / (float)canvas.Height); }
+            else { amountToIncreaseSizeBy = ((float)canvas.Height / (float)canvas.Width); }
+
+            float sizeOfBoard = 0.55F * amountToIncreaseSizeBy;
 
             //draw background
             float positionOfSkyToGround = (250F / 770F) * canvas.Height;
@@ -99,7 +105,7 @@ namespace Cornhole_Simulator_2
 
             //draw hand
             //TODO: make hand smaller, fix angle calculation, draw bag in hand, change hand perspective in engine\\
-            int topOfArm1 = height - arm1.Height + 150;
+            int topOfArm1 = height - arm1.Height + 170;
             int bottomOfArm1 = height;
 
             int topOfArm2 = height - arm1.Height + 20;
@@ -139,6 +145,7 @@ namespace Cornhole_Simulator_2
             if (started)
             {
                 positionOfHandX = width / 2 - x;
+                positionOfHandY = height / 2 - y;
             }
         }
 
