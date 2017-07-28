@@ -19,6 +19,8 @@ namespace Cornhole_Simulator_2
         Bitmap redBag = Cornhole_Simulator_2.Properties.Resources.redBag;
         Bitmap arm1 = Cornhole_Simulator_2.Properties.Resources.arm1;
         Bitmap arm2 = Cornhole_Simulator_2.Properties.Resources.arm2;
+        Bitmap arm1Shadow = Cornhole_Simulator_2.Properties.Resources.arm1Shadow;
+        Bitmap arm2Shadow = Cornhole_Simulator_2.Properties.Resources.arm2Shadow;
         int amountOFBagsForPlayer1 = 4;
         int amountOfBagsForPlayer2 = 4;
         int player1Score = 0;
@@ -97,18 +99,34 @@ namespace Cornhole_Simulator_2
             //draw scores
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
-            //draw hand
-            //TODO: make hand smaller, fix angle calculation, draw bag in hand, change hand perspective in engine, resize arm based on size, draw shadow of arm\\
+            //draw shadow for hand
+            int yPositionOfArm1Shadow = height - arm1.Height + 170;
+            int xPositionOfArm1Shadow = width / 2 + 75 - 70;
+            int bottomOfArm1Shadow = height;
 
-            //good enough for now, needs redone in 3D
+            int yPositionOfArm2Shadow = height - arm1.Height + 30;
+            int xPositionOfArm2Shadow = width / 2 + 75 - 70;
+            int bottomOfArm2Shadow = yPositionOfArm1Shadow;
+
+            Point[] shadowPointsForArm1 = {
+                new Point(xPositionOfArm1Shadow - positionOfHandX, yPositionOfArm1Shadow),
+                new Point(xPositionOfArm1Shadow + arm1.Width - positionOfHandX - 30, yPositionOfArm1Shadow),
+                new Point(xPositionOfArm1Shadow, bottomOfArm1Shadow)};
+            Point[] shadowPointsForArm2 = {
+                new Point((int)(xPositionOfArm2Shadow - (positionOfHandX * 3.25F)), yPositionOfArm2Shadow),
+                new Point((int)(xPositionOfArm2Shadow - (positionOfHandX * 3.25F)) + arm2.Width - 30, yPositionOfArm2Shadow),
+                new Point(xPositionOfArm2Shadow - positionOfHandX - 20, bottomOfArm2Shadow + 10)};
+
+            g.DrawImage(arm1Shadow, shadowPointsForArm1);
+            g.DrawImage(arm2Shadow, shadowPointsForArm2);
+
+            //draw hand
             int yPositionOfArm1 = height - arm1.Height + 170;
             int xPositionOfArm1 = width / 2 + 75;
-            int rotationOfArm1 = 0;
             int bottomOfArm1 = height;
 
             int yPositionOfArm2 = height - arm1.Height + 20;
             int xPositionOfArm2 = width / 2 + 75;
-            int rotationOfArm2 = 0;
             int bottomOfArm2 = yPositionOfArm1;
 
             Point[] pointsForArm1 = {
@@ -116,13 +134,14 @@ namespace Cornhole_Simulator_2
                 new Point(xPositionOfArm1 + arm1.Width - positionOfHandX, yPositionOfArm1),
                 new Point(xPositionOfArm1, bottomOfArm1)};
             Point[] pointsForArm2 = {
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * 2.85F)), yPositionOfArm2),
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * 2.85F)) + arm2.Width, yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * 3.25F)), yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * 3.25F)) + arm2.Width, yPositionOfArm2),
                 new Point(xPositionOfArm2 - positionOfHandX - 20, bottomOfArm2 + 10)};
 
             g.DrawImage(arm1, pointsForArm1);
             g.DrawImage(arm2, pointsForArm2);
 
+            //draw bag in hand
             //Point[] pointsForBagInHand =
             //{
             //    new Point(width / 2 - arm2.Width / 2 - (int)(positionOfHandX * 2.5F), topOfArm2),
