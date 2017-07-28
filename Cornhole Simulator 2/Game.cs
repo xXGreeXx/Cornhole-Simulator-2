@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Cornhole_Simulator_2
@@ -33,6 +29,12 @@ namespace Cornhole_Simulator_2
         String turn = "";
         int turnFadeCycle = 255;
         float sizeOfBoard = 0.75F;
+        List<BeanBag> beanBags = new List<BeanBag>();
+        Boolean recordMovements = false;
+        int xVelocity = 0;
+        int yVelocity = 0;
+        int pastX = 0;
+        int pastY = 0;
 
         //initialize
         public Game()
@@ -54,7 +56,7 @@ namespace Cornhole_Simulator_2
             Graphics g = e.Graphics;
             int width = canvas.Width;
             int height = canvas.Height;
-
+            
             //draw background
             float positionOfSkyToGround = (250F / 770F) * canvas.Height;
 
@@ -122,10 +124,8 @@ namespace Cornhole_Simulator_2
             //g.DrawImage(arm1Shadow, shadowPointsForArm1);
             //g.DrawImage(arm2Shadow, shadowPointsForArm2);
 
-
-
             //draw hand
-            int yPositionOfArm1 = height - arm1.Height + 170;
+            int yPositionOfArm1 = height - arm1.Height + 170 - positionOfHandY;
             int xPositionOfArm1 = width / 2;
             int bottomOfArm1 = height;
 
@@ -148,8 +148,8 @@ namespace Cornhole_Simulator_2
             //draw bag in hand
             Point[] pointsForBagInHand =
             {
-                new Point(width / 2 - arm2.Width / 2 - (int)(positionOfHandX * angularSpeedIncrease), yPositionOfArm2),
-                new Point(width / 2 + redBag.Width / 2 - (int)(positionOfHandX * angularSpeedIncrease), yPositionOfArm2),
+                new Point(width / 2 - arm2.Width / 2 - (int)(positionOfHandX * angularSpeedIncrease), (int)(yPositionOfArm2 - positionOfHandY * angularSpeedIncrease)),
+                new Point(width / 2 + redBag.Width / 2 - (int)(positionOfHandX * angularSpeedIncrease), (int)(yPositionOfArm2 - positionOfHandY * angularSpeedIncrease)),
                 new Point(width / 2 - arm1.Width / 2 - 20 - (int)(positionOfHandX * angularSpeedIncrease), yPositionOfArm2 + redBag.Width)
              };
 
@@ -169,6 +169,20 @@ namespace Cornhole_Simulator_2
             {
                 positionOfHandX = width / 2 - x;
                 positionOfHandY = height / 2 - y;
+
+                if (recordMovements)
+                {
+                    if (pastX == 0 || pastY == 0)
+                    {
+                        pastX = x;
+                        pastY = y;
+                    }
+                    else
+                    {
+                        xVelocity += Math.Abs(x - pastX);
+                        yVelocity += Math.Abs(y - pastY);
+                    }
+                }
             }
         }
 
@@ -183,6 +197,11 @@ namespace Cornhole_Simulator_2
                 started = true;
                 turn = "player1";
             }
+
+            else if (started)
+            {
+                recordMovements = true;
+            }
         }
 
         //canvas mouse up handler
@@ -195,7 +214,14 @@ namespace Cornhole_Simulator_2
 
             if (started)
             {
+                int z = 0;
 
+                BeanBag bagToAdd = new BeanBag(x, y, z, xVelocity, yVelocity);
+                beanBags.Add(bagToAdd);
+
+                pastX = 0;
+                pastY = 0;
+                recordMovements = false;
             }
         }
     }
