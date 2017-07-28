@@ -98,7 +98,7 @@ namespace Cornhole_Simulator_2
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
             //draw hand
-            //TODO: make hand smaller, fix angle calculation, draw bag in hand, change hand perspective in engine, resize arm based on size\\
+            //TODO: make hand smaller, fix angle calculation, draw bag in hand, change hand perspective in engine, resize arm based on size, draw shadow of arm\\
 
             //good enough for now, needs redone in 3D
             int yPositionOfArm1 = height - arm1.Height + 170;
@@ -106,20 +106,19 @@ namespace Cornhole_Simulator_2
             int rotationOfArm1 = 0;
             int bottomOfArm1 = height;
 
-            //not done yet :(
             int yPositionOfArm2 = height - arm1.Height + 20;
-            int xPositionOfArm2 = 0;
+            int xPositionOfArm2 = width / 2 + 75;
             int rotationOfArm2 = 0;
-            int bottomOfArm2 = xPositionOfArm1;
+            int bottomOfArm2 = yPositionOfArm1;
 
             Point[] pointsForArm1 = {
                 new Point(xPositionOfArm1 - positionOfHandX, yPositionOfArm1),
                 new Point(xPositionOfArm1 + arm1.Width - positionOfHandX, yPositionOfArm1),
                 new Point(xPositionOfArm1, bottomOfArm1)};
             Point[] pointsForArm2 = {
-                new Point((int)(xPositionOfArm2 - positionOfHandX), yPositionOfArm2),
-                new Point(xPositionOfArm1 + arm1.Width - positionOfHandY, yPositionOfArm2),
-                new Point(xPositionOfArm2 - positionOfHandY, bottomOfArm2)};
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * 2.85F)), yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * 2.85F)) + arm2.Width, yPositionOfArm2),
+                new Point(xPositionOfArm2 - positionOfHandX - 20, bottomOfArm2 + 10)};
 
             g.DrawImage(arm1, pointsForArm1);
             g.DrawImage(arm2, pointsForArm2);
