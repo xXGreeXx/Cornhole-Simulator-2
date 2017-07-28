@@ -122,6 +122,8 @@ namespace Cornhole_Simulator_2
             //g.DrawImage(arm1Shadow, shadowPointsForArm1);
             //g.DrawImage(arm2Shadow, shadowPointsForArm2);
 
+
+
             //draw hand
             int yPositionOfArm1 = height - arm1.Height + 170;
             int xPositionOfArm1 = width / 2;
@@ -138,7 +140,7 @@ namespace Cornhole_Simulator_2
             Point[] pointsForArm2 = {
                 new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) - 10, yPositionOfArm2),
                 new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 20, yPositionOfArm2),
-                new Point(xPositionOfArm2 - positionOfHandX - 30, bottomOfArm2 + 10)};
+                new Point(xPositionOfArm2 - positionOfHandX - 20, bottomOfArm2 + 10)};
 
             g.DrawImage(arm1, pointsForArm1);
             g.DrawImage(arm2, pointsForArm2);
