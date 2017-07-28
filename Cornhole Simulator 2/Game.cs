@@ -30,6 +30,7 @@ namespace Cornhole_Simulator_2
         Boolean startedSwap = false;
         String turn = "";
         int turnFadeCycle = 255;
+        float sizeOfBoard = 0.75F;
 
         //initialize
         public Game()
@@ -51,13 +52,6 @@ namespace Cornhole_Simulator_2
             Graphics g = e.Graphics;
             int width = canvas.Width;
             int height = canvas.Height;
-
-            float amountToIncreaseSizeBy = 1.0F;
-
-            if (width > height) { amountToIncreaseSizeBy = ((float)canvas.Width / (float)canvas.Height); }
-            else { amountToIncreaseSizeBy = ((float)canvas.Height / (float)canvas.Width); }
-
-            float sizeOfBoard = 0.55F * amountToIncreaseSizeBy;
 
             //draw background
             float positionOfSkyToGround = (250F / 770F) * canvas.Height;
@@ -104,21 +98,28 @@ namespace Cornhole_Simulator_2
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
             //draw hand
-            //TODO: make hand smaller, fix angle calculation, draw bag in hand, change hand perspective in engine\\
-            int topOfArm1 = height - arm1.Height + 170;
+            //TODO: make hand smaller, fix angle calculation, draw bag in hand, change hand perspective in engine, resize arm based on size\\
+
+            //good enough for now, needs redone in 3D
+            int yPositionOfArm1 = height - arm1.Height + 170;
+            int xPositionOfArm1 = width / 2 + 75;
+            int rotationOfArm1 = 0;
             int bottomOfArm1 = height;
 
-            int topOfArm2 = height - arm1.Height + 20;
-            int bottomOfArm2 = topOfArm1;
+            //not done yet :(
+            int yPositionOfArm2 = height - arm1.Height + 20;
+            int xPositionOfArm2 = 0;
+            int rotationOfArm2 = 0;
+            int bottomOfArm2 = xPositionOfArm1;
 
             Point[] pointsForArm1 = {
-                new Point(width / 2 - arm1.Width / 2 - positionOfHandX, topOfArm1),
-                new Point(width / 2 + arm1.Width / 2 - positionOfHandX, topOfArm1),
-                new Point(width / 2 - arm1.Width / 2, bottomOfArm1)};
+                new Point(xPositionOfArm1 - positionOfHandX, yPositionOfArm1),
+                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX, yPositionOfArm1),
+                new Point(xPositionOfArm1, bottomOfArm1)};
             Point[] pointsForArm2 = {
-                new Point(width / 2 - arm2.Width / 2 - (int)(positionOfHandX * 2.5F), topOfArm2),
-                new Point(width / 2 + arm2.Width / 2 - (int)(positionOfHandX * 2.5F), topOfArm2),
-                new Point(width / 2 - arm1.Width / 2 - 20 - positionOfHandX, bottomOfArm2 + 10)};
+                new Point((int)(xPositionOfArm2 - positionOfHandX), yPositionOfArm2),
+                new Point(xPositionOfArm1 + arm1.Width - positionOfHandY, yPositionOfArm2),
+                new Point(xPositionOfArm2 - positionOfHandY, bottomOfArm2)};
 
             g.DrawImage(arm1, pointsForArm1);
             g.DrawImage(arm2, pointsForArm2);
@@ -134,7 +135,7 @@ namespace Cornhole_Simulator_2
             //else if (turn.Equals("player2")) { g.DrawImage(blueBag, pointsForBagInHand); }
         }
 
-        //canvas mouse move
+        //canvas mouse move handler
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
             int x = e.X;
@@ -159,6 +160,20 @@ namespace Cornhole_Simulator_2
             {
                 started = true;
                 turn = "player1";
+            }
+        }
+
+        //canvas mouse up handler
+        private void canvas_MouseUp(object sender, MouseEventArgs e)
+        {
+            int x = e.X;
+            int y = e.Y;
+            int width = canvas.Width;
+            int height = canvas.Height;
+
+            if (started)
+            {
+
             }
         }
     }
