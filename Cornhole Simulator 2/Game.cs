@@ -18,6 +18,7 @@ namespace Cornhole_Simulator_2
         Bitmap arm2 = Cornhole_Simulator_2.Properties.Resources.arm2;
         Bitmap arm1Shadow = Cornhole_Simulator_2.Properties.Resources.arm1Shadow;
         Bitmap arm2Shadow = Cornhole_Simulator_2.Properties.Resources.arm2Shadow;
+        public static float positionOfSkyToGround = 0;
         int amountOfBagsForPlayer1 = 4;
         int amountOfBagsForPlayer2 = 4;
         int player1Score = 0;
@@ -40,6 +41,9 @@ namespace Cornhole_Simulator_2
         Boolean thrown = false;
         int bagStartPositionX = 0;
         int bagStartPositionY = 0;
+        Boolean changeRound = false;
+        int round = 1;
+        int roundFadeCycle = 255;
 
         //initialize
         public Game()
@@ -61,9 +65,9 @@ namespace Cornhole_Simulator_2
             Graphics g = e.Graphics;
             int width = canvas.Width;
             int height = canvas.Height;
-            
+
             //draw background
-            float positionOfSkyToGround = (250F / 770F) * canvas.Height;
+            positionOfSkyToGround = (250F / 770F) * canvas.Height;
 
             g.FillRectangle(Brushes.SkyBlue, 0, 0, width, positionOfSkyToGround);
             g.DrawImage(grass, 0, positionOfSkyToGround, width, height - positionOfSkyToGround);
@@ -106,8 +110,9 @@ namespace Cornhole_Simulator_2
             //draw scores
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
-            //call physics
+            //call other functions
             callPhysicsEngine();
+            calculateIfNextPlayerTurn();
 
             //draw hand
             float angularSpeedIncrease = 2.05F;
@@ -157,7 +162,7 @@ namespace Cornhole_Simulator_2
             //draw bean bags
             foreach (BeanBag bag in beanBags)
             {
-                float sizeBaseOnZ = 1.5F;
+                float sizeBaseOnZ = 1.5F * (bag.BagZ / redBag.Width);
 
                 if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(redBag, bag.BagX, bag.BagY, redBag.Width * sizeBaseOnZ, redBag.Height * sizeBaseOnZ); }
                 else { g.DrawImage(blueBag, bag.BagX, bag.BagY, blueBag.Width * sizeBaseOnZ, blueBag.Height * sizeBaseOnZ); }
@@ -215,13 +220,33 @@ namespace Cornhole_Simulator_2
 
             if (started)
             {
-                int z = 0;
+                float z = 50.0F;
+                String dir = "left";
 
-                BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, 1);
-                beanBags.Add(bagToAdd);
+                if (positionOfHandX < width / 2)
+                {
+                    dir = "left";
+                }
+                else
+                {
+                    dir = "right";
+                }
+                
+                if (turn.Equals("player1"))
+                {
+                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, 1, dir);
+                    beanBags.Add(bagToAdd);
+                }
+                else if (turn.Equals("player2"))
+                {
+                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, 2, dir);
+                    beanBags.Add(bagToAdd);
+                }
 
                 pastX = 0;
                 pastY = 0;
+                xVelocity = 0;
+                yVelocity = 0;
                 thrown = true;
                 recordMovements = false;
             }
@@ -238,6 +263,44 @@ namespace Cornhole_Simulator_2
         private void callPhysicsEngine()
         {
             physicsEngine.SimulatePhysicsForBeanBags(beanBags);
+        }
+
+        //calculate if it is the next players turn
+        private void calculateIfNextPlayerTurn()
+        {
+            foreach (BeanBag bag in beanBags)
+            {
+                if (bag.BagVelocityX <= 0 && bag.BagVelocityY <= 0 && thrown)
+                {
+                    if (amountOfBagsForPlayer1 == 0 && amountOfBagsForPlayer2 == 0)
+                    {
+                        changeRound = true;
+                        roundFadeCycle = 255;
+                        round++;
+
+                        calculatePointsAfterRound();
+                    }
+
+                    if (turn.Equals("player1"))
+                    {
+                        turn = "player2";
+                        amountOfBagsForPlayer2--;
+                        thrown = false;
+                    }
+                    else if (turn.Equals("player2"))
+                    {
+                        turn = "player1";
+                        amountOfBagsForPlayer1--;
+                        thrown = false;
+                    }
+                }
+            }
+        }
+
+        //calculate points after round
+        private void calculatePointsAfterRound()
+        {
+
         }
     }
 }

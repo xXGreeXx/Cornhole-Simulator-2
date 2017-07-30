@@ -11,14 +11,15 @@ namespace Cornhole_Simulator_2
         //define global variables
         public int BagX { get; set; }
         public int BagY { get; set; }
-        public int BagZ { get; set; }
+        public float BagZ { get; set; }
         public int BagOrientation { get; set; } = 0;
         public int BagVelocityX { get; set; }
         public int BagVelocityY { get; set; }
         public int playerIDOfBag { get; set; }
+        public String directionOfBag { get; set; }
 
         //constructor
-        public BeanBag(int x, int y, int z, int xVelocity, int yVelocity, int playerID)
+        public BeanBag(int x, int y, float z, int xVelocity, int yVelocity, int playerID, String direction)
         {
             BagX = x;
             BagY = y;
@@ -26,6 +27,7 @@ namespace Cornhole_Simulator_2
             BagVelocityX = xVelocity;
             BagVelocityY = yVelocity;
             playerIDOfBag = playerID;
+            directionOfBag = direction;
         }
     }
 }
