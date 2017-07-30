@@ -25,6 +25,5 @@ namespace Cornhole_Simulator_2
             BagVelocityX = xVelocity;
             BagVelocityY = yVelocity;
         }
-
     }
 }

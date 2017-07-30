@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Cornhole_Simulator_2
@@ -102,49 +103,37 @@ namespace Cornhole_Simulator_2
             //draw scores
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
-            //draw shadow for hand
-            float angularSpeedIncrease = 2.55F;
-
-            int yPositionOfArm1Shadow = height - arm1.Height + 170;
-            int xPositionOfArm1Shadow = width / 2 - 70;
-            int bottomOfArm1Shadow = height;
-
-            int yPositionOfArm2Shadow = height - arm1.Height + 30;
-            int xPositionOfArm2Shadow = xPositionOfArm1Shadow;
-            int bottomOfArm2Shadow = yPositionOfArm1Shadow;
-
-            Point[] shadowPointsForArm1 = {
-                new Point(xPositionOfArm1Shadow - positionOfHandX, yPositionOfArm1Shadow),
-                new Point(xPositionOfArm1Shadow + arm1.Width - positionOfHandX - 40, yPositionOfArm1Shadow),
-                new Point(xPositionOfArm1Shadow, bottomOfArm1Shadow)};
-            Point[] shadowPointsForArm2 = {
-                new Point((int)(xPositionOfArm2Shadow - (positionOfHandX * angularSpeedIncrease)), yPositionOfArm2Shadow),
-                new Point((int)(xPositionOfArm2Shadow - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 40, yPositionOfArm2Shadow),
-                new Point(xPositionOfArm2Shadow - positionOfHandX - 20, bottomOfArm2Shadow + 10)};
-
-            //g.DrawImage(arm1Shadow, shadowPointsForArm1);
-            //g.DrawImage(arm2Shadow, shadowPointsForArm2);
+            //call physics
+            callPhysicsEngine();
 
             //draw hand
-            int yPositionOfArm1 = height - arm1.Height + 170 - positionOfHandY;
+            float angularSpeedIncrease = 2.05F;
+
             int xPositionOfArm1 = width / 2;
+            int yPositionOfArm1 = height - arm1.Height + 140;
             int bottomOfArm1 = height;
 
-            int yPositionOfArm2 = height - arm1.Height + 40;
             int xPositionOfArm2 = xPositionOfArm1;
+            int yPositionOfArm2 = height - arm1.Height + 40;
             int bottomOfArm2 = yPositionOfArm1;
 
             Point[] pointsForArm1 = {
-                new Point(xPositionOfArm1 - positionOfHandX, yPositionOfArm1),
-                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX - 10, yPositionOfArm1),
-                new Point(xPositionOfArm1, bottomOfArm1)};
+                new Point(xPositionOfArm1 - positionOfHandX + 10 - 60 + (positionOfHandY / 30), yPositionOfArm1),
+                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX - 10 - 60 - (positionOfHandY / 30), yPositionOfArm1),
+                new Point(xPositionOfArm1 + (positionOfHandY / 30), bottomOfArm1),
+                new Point(xPositionOfArm1 - arm1.Width / 2 - (positionOfHandY / 30), bottomOfArm1),
+            };
             Point[] pointsForArm2 = {
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) - 10, yPositionOfArm2),
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 20, yPositionOfArm2),
-                new Point(xPositionOfArm2 - positionOfHandX - 20, bottomOfArm2 + 10)};
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + (positionOfHandY / 20), yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 - (positionOfHandY / 20), yPositionOfArm2),
+                new Point(xPositionOfArm2 - positionOfHandX + 65 - 60 - (positionOfHandY / 30), bottomOfArm2 + 10),
+                new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + (positionOfHandY / 30), bottomOfArm2 + 10)
+            };
 
-            g.DrawImage(arm1, pointsForArm1);
-            g.DrawImage(arm2, pointsForArm2);
+            g.FillPolygon(new SolidBrush(Color.FromArgb(255, Color.DarkOrange.R, Color.DarkOrange.G + 30, Color.DarkOrange.B + 30)), pointsForArm1);
+            g.FillPolygon(Brushes.DarkOrange, pointsForArm2);
+
+
 
             //draw bag in hand
             Point[] pointsForBagInHand =
@@ -229,7 +218,7 @@ namespace Cornhole_Simulator_2
         //call phyics engine
         private void callPhysicsEngine()
         {
-
+            physicsEngine.SimulatePhysicsForBeanBags(beanBags);
         }
     }
 }
