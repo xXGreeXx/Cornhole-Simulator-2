@@ -18,7 +18,7 @@ namespace Cornhole_Simulator_2
         Bitmap arm2 = Cornhole_Simulator_2.Properties.Resources.arm2;
         Bitmap arm1Shadow = Cornhole_Simulator_2.Properties.Resources.arm1Shadow;
         Bitmap arm2Shadow = Cornhole_Simulator_2.Properties.Resources.arm2Shadow;
-        int amountOFBagsForPlayer1 = 4;
+        int amountOfBagsForPlayer1 = 4;
         int amountOfBagsForPlayer2 = 4;
         int player1Score = 0;
         int player2Score = 0;
@@ -37,6 +37,9 @@ namespace Cornhole_Simulator_2
         int pastX = 0;
         int pastY = 0;
         Physics physicsEngine = new Physics();
+        Boolean thrown = false;
+        int bagStartPositionX = 0;
+        int bagStartPositionY = 0;
 
         //initialize
         public Game()
@@ -91,11 +94,11 @@ namespace Cornhole_Simulator_2
             g.DrawRectangle(Pens.Black, 2, 25, 47, 203);
             g.DrawRectangle(Pens.Black, width - blueBag.Width, 25, 47, 203);
 
-            for (int i = 0; i < amountOFBagsForPlayer1; i++)
+            for (int i = 0; i < amountOfBagsForPlayer1; i++)
             {
                 g.DrawImage(redBag, 0, 0 + (redBag.Width * i + 25), redBag.Width, redBag.Height);
             }
-            for (int i = 0; i < amountOFBagsForPlayer1; i++)
+            for (int i = 0; i < amountOfBagsForPlayer2; i++)
             {
                 g.DrawImage(blueBag, width - blueBag.Width - 2, 0 + (blueBag.Width * i + 25), blueBag.Width, blueBag.Height);
             }
@@ -118,33 +121,47 @@ namespace Cornhole_Simulator_2
             int bottomOfArm2 = yPositionOfArm1;
 
             Point[] pointsForArm1 = {
-                new Point(xPositionOfArm1 - positionOfHandX + 10 - 60 + (positionOfHandY / 30), yPositionOfArm1),
-                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX - 10 - 60 - (positionOfHandY / 30), yPositionOfArm1),
-                new Point(xPositionOfArm1 + (positionOfHandY / 30), bottomOfArm1),
-                new Point(xPositionOfArm1 - arm1.Width / 2 - (positionOfHandY / 30), bottomOfArm1),
+                new Point(xPositionOfArm1 - positionOfHandX + 10 - 60 + -(positionOfHandY / 30), yPositionOfArm1),
+                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX - 10 - 60 - -(positionOfHandY / 30), yPositionOfArm1),
+                new Point(xPositionOfArm1 + -(positionOfHandY / 30), bottomOfArm1),
+                new Point(xPositionOfArm1 - arm1.Width / 2 - -(positionOfHandY / 30), bottomOfArm1),
             };
             Point[] pointsForArm2 = {
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + (positionOfHandY / 20), yPositionOfArm2),
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 - (positionOfHandY / 20), yPositionOfArm2),
-                new Point(xPositionOfArm2 - positionOfHandX + 65 - 60 - (positionOfHandY / 30), bottomOfArm2 + 10),
-                new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + (positionOfHandY / 30), bottomOfArm2 + 10)
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20), yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 - -(positionOfHandY / 20), yPositionOfArm2),
+                new Point(xPositionOfArm2 - positionOfHandX + 65 - 60 - -(positionOfHandY / 30), bottomOfArm2 + 10),
+                new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + -(positionOfHandY / 30), bottomOfArm2 + 10)
             };
 
             g.FillPolygon(new SolidBrush(Color.FromArgb(255, Color.DarkOrange.R, Color.DarkOrange.G + 30, Color.DarkOrange.B + 30)), pointsForArm1);
             g.FillPolygon(Brushes.DarkOrange, pointsForArm2);
 
-
-
             //draw bag in hand
             Point[] pointsForBagInHand =
             {
-                new Point(width / 2 - arm2.Width / 2 - (int)(positionOfHandX * angularSpeedIncrease), (int)(yPositionOfArm2 - positionOfHandY * angularSpeedIncrease)),
-                new Point(width / 2 + redBag.Width / 2 - (int)(positionOfHandX * angularSpeedIncrease), (int)(yPositionOfArm2 - positionOfHandY * angularSpeedIncrease)),
-                new Point(width / 2 - arm1.Width / 2 - 20 - (int)(positionOfHandX * angularSpeedIncrease), yPositionOfArm2 + redBag.Width)
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20), yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 - -(positionOfHandY / 20), yPositionOfArm2),
+                new Point(xPositionOfArm2 - positionOfHandX + 65 - 60 - -(positionOfHandY / 20), bottomOfArm2 + 10 - 80),
+                new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + -(positionOfHandY / 20), bottomOfArm2 + 10 - 80)
              };
 
-            //if (turn.Equals("player1")) { g.DrawImage(redBag, pointsForBagInHand); }
-            //else if (turn.Equals("player2")) { g.DrawImage(blueBag, pointsForBagInHand); }
+            bagStartPositionX = (int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20);
+            bagStartPositionY = yPositionOfArm2;
+
+            if (!thrown)
+            {
+                if (turn.Equals("player1")) { g.FillPolygon(Brushes.Red, pointsForBagInHand); }
+                else if (turn.Equals("player2")) { g.FillPolygon(Brushes.Blue, pointsForBagInHand); }
+            }
+
+            //draw bean bags
+            foreach (BeanBag bag in beanBags)
+            {
+                float sizeBaseOnZ = 1.5F;
+
+                if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(redBag, bag.BagX, bag.BagY, redBag.Width * sizeBaseOnZ, redBag.Height * sizeBaseOnZ); }
+                else { g.DrawImage(blueBag, bag.BagX, bag.BagY, blueBag.Width * sizeBaseOnZ, blueBag.Height * sizeBaseOnZ); }
+            }
         }
 
         //canvas mouse move handler
@@ -182,13 +199,7 @@ namespace Cornhole_Simulator_2
             int x = e.X;
             int y = e.Y;
 
-            if (!started)
-            {
-                started = true;
-                turn = "player1";
-            }
-
-            else if (started)
+            if (started)
             {
                 recordMovements = true;
             }
@@ -206,12 +217,20 @@ namespace Cornhole_Simulator_2
             {
                 int z = 0;
 
-                BeanBag bagToAdd = new BeanBag(x, y, z, xVelocity, yVelocity);
+                BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, 1);
                 beanBags.Add(bagToAdd);
 
                 pastX = 0;
                 pastY = 0;
+                thrown = true;
                 recordMovements = false;
+            }
+
+            if (!started)
+            {
+                started = true;
+                turn = "player1";
+                amountOfBagsForPlayer1--;
             }
         }
 

@@ -15,15 +15,17 @@ namespace Cornhole_Simulator_2
         public int BagOrientation { get; set; } = 0;
         public int BagVelocityX { get; set; }
         public int BagVelocityY { get; set; }
+        public int playerIDOfBag { get; set; }
 
         //constructor
-        public BeanBag(int x, int y, int z, int xVelocity, int yVelocity)
+        public BeanBag(int x, int y, int z, int xVelocity, int yVelocity, int playerID)
         {
             BagX = x;
             BagY = y;
             BagZ = z;
             BagVelocityX = xVelocity;
             BagVelocityY = yVelocity;
+            playerIDOfBag = playerID;
         }
     }
 }
