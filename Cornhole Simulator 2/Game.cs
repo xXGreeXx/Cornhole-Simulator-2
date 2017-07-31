@@ -41,7 +41,7 @@ namespace Cornhole_Simulator_2
         Boolean thrown = false;
         int bagStartPositionX = 0;
         int bagStartPositionY = 0;
-        Boolean changeRound = false;
+        Boolean changeRound = true;
         int round = 1;
         int roundFadeCycle = 255;
 
@@ -88,9 +88,10 @@ namespace Cornhole_Simulator_2
             }
 
             //draw player turn text
-            if (turn.Equals("player1") && turnFadeCycle >= 4)
+            if (turnFadeCycle >= 4 && !changeRound)
             {
-                g.DrawString("Player One's Turn", new Font(FontFamily.GenericSansSerif, 30, FontStyle.Bold), new SolidBrush(Color.FromArgb(turnFadeCycle, Color.Red)), width / 2 - 165, 140);
+                if (turn.Equals("player1")) { g.DrawString("Player One's Turn", new Font(FontFamily.GenericSansSerif, 30, FontStyle.Bold), new SolidBrush(Color.FromArgb(turnFadeCycle, Color.Red)), width / 2 - 165, 140); }
+                else if (turn.Equals("player2")) { g.DrawString("Player Two's Turn", new Font(FontFamily.GenericSansSerif, 30, FontStyle.Bold), new SolidBrush(Color.FromArgb(turnFadeCycle, Color.Blue)), width / 2 - 165, 140); }
                 turnFadeCycle -= 5;
             }
 
@@ -109,6 +110,18 @@ namespace Cornhole_Simulator_2
 
             //draw scores
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
+
+            //draw round
+            if (changeRound && roundFadeCycle >= 4 && started)
+            {
+                g.DrawString("Round: " + round.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), new SolidBrush(Color.FromArgb(roundFadeCycle, Color.Black)), width / 2 - 70, 150);
+
+                roundFadeCycle -= 4;
+            }
+            if (roundFadeCycle <= 4)
+            {
+                changeRound = false;
+            }
 
             //call other functions
             callPhysicsEngine();
@@ -218,7 +231,7 @@ namespace Cornhole_Simulator_2
             int width = canvas.Width;
             int height = canvas.Height;
 
-            if (started)
+            if (started && !thrown && !changeRound)
             {
                 float z = 50.0F;
                 String dir = "left";
@@ -268,31 +281,48 @@ namespace Cornhole_Simulator_2
         //calculate if it is the next players turn
         private void calculateIfNextPlayerTurn()
         {
+            Boolean check = true;
+
+            if (beanBags.Count <= 0)
+            {
+                check = false;
+            }
+
             foreach (BeanBag bag in beanBags)
             {
-                if (bag.BagVelocityX <= 0 && bag.BagVelocityY <= 0 && thrown)
+                if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                 {
-                    if (amountOfBagsForPlayer1 == 0 && amountOfBagsForPlayer2 == 0)
-                    {
-                        changeRound = true;
-                        roundFadeCycle = 255;
-                        round++;
+                    check = false;
+                }
+            }
 
-                        calculatePointsAfterRound();
-                    }
+            if (check && thrown)
+            {
+                if (amountOfBagsForPlayer1 == 0 && amountOfBagsForPlayer2 == 0)
+                {
+                    changeRound = true;
+                    roundFadeCycle = 255;
+                    round++;
 
-                    if (turn.Equals("player1"))
-                    {
-                        turn = "player2";
-                        amountOfBagsForPlayer2--;
-                        thrown = false;
-                    }
-                    else if (turn.Equals("player2"))
-                    {
-                        turn = "player1";
-                        amountOfBagsForPlayer1--;
-                        thrown = false;
-                    }
+                    amountOfBagsForPlayer1 = 4;
+                    amountOfBagsForPlayer2 = 4;
+
+                    calculatePointsAfterRound();
+                }
+
+                if (turn.Equals("player1"))
+                {
+                    turn = "player2";
+                    amountOfBagsForPlayer2--;
+                    thrown = false;
+                    turnFadeCycle = 255;
+                }
+                else if (turn.Equals("player2"))
+                {
+                    turn = "player1";
+                    amountOfBagsForPlayer1--;
+                    thrown = false;
+                    turnFadeCycle = 255;
                 }
             }
         }
@@ -301,6 +331,9 @@ namespace Cornhole_Simulator_2
         private void calculatePointsAfterRound()
         {
 
+
+
+            beanBags = new List<BeanBag>();
         }
     }
 }

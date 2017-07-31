@@ -28,11 +28,7 @@ namespace Cornhole_Simulator_2
                     else { bag.BagX += finalVelocityX; }
 
 
-                    if (bag.BagY <= Game.positionOfSkyToGround)
-                    {
-                        bag.BagZ -= 0.1F;
-                    }
-                    else
+                    if (bag.BagY > Game.positionOfSkyToGround)
                     {
                         bag.BagY -= finalVelocityY;
                     }
