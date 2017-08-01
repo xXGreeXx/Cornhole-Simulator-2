@@ -16,8 +16,6 @@ namespace Cornhole_Simulator_2
         Bitmap redBag = Cornhole_Simulator_2.Properties.Resources.redBag;
         Bitmap arm1 = Cornhole_Simulator_2.Properties.Resources.arm1;
         Bitmap arm2 = Cornhole_Simulator_2.Properties.Resources.arm2;
-        Bitmap arm1Shadow = Cornhole_Simulator_2.Properties.Resources.arm1Shadow;
-        Bitmap arm2Shadow = Cornhole_Simulator_2.Properties.Resources.arm2Shadow;
         public static float positionOfSkyToGround = 0;
         int amountOfBagsForPlayer1 = 4;
         int amountOfBagsForPlayer2 = 4;
@@ -175,10 +173,17 @@ namespace Cornhole_Simulator_2
             //draw bean bags
             foreach (BeanBag bag in beanBags)
             {
-                float sizeBaseOnZ = 1.5F * (bag.BagZ / redBag.Width);
+                float sizeOfBag = 1.5F * (bag.BagZ / redBag.Width);
 
-                if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(redBag, bag.BagX, bag.BagY, redBag.Width * sizeBaseOnZ, redBag.Height * sizeBaseOnZ); }
-                else { g.DrawImage(blueBag, bag.BagX, bag.BagY, blueBag.Width * sizeBaseOnZ, blueBag.Height * sizeBaseOnZ); }
+                if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(redBag, bag.BagX, bag.BagY, redBag.Width * sizeOfBag, redBag.Height * sizeOfBag); }
+                else { g.DrawImage(blueBag, bag.BagX, bag.BagY, blueBag.Width * sizeOfBag, blueBag.Height * sizeOfBag); }
+
+                //draw shadow of bag
+                if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
+                {
+                    SolidBrush colorOFShadow = new SolidBrush(Color.FromArgb(125, Color.Black));
+                    g.FillRectangle(colorOFShadow, bag.BagX + (30 * sizeOfBag) + (15 * sizeOfBag), bag.BagY + (30 * sizeOfBag) + (15 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
+                }
             }
         }
 

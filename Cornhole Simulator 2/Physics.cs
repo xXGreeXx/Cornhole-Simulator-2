@@ -33,7 +33,15 @@ namespace Cornhole_Simulator_2
                         bag.BagY -= finalVelocityY;
                     }
 
-                    bag.BagZ -= 0.8F;
+                    if (bag.BagZ > 10)
+                    {
+                        bag.BagZ -= 0.8F;
+                    }
+                    else
+                    {
+                        bag.BagVelocityX = 0;
+                        bag.BagVelocityY = 0;
+                    }
                 }
 
                 if (bag.BagVelocityX > 0)

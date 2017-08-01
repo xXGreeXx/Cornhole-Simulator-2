@@ -73,29 +73,9 @@ namespace Cornhole_Simulator_2.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap arm1Shadow {
-            get {
-                object obj = ResourceManager.GetObject("arm1Shadow", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap arm2 {
             get {
                 object obj = ResourceManager.GetObject("arm2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap arm2Shadow {
-            get {
-                object obj = ResourceManager.GetObject("arm2Shadow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
