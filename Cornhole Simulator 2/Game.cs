@@ -42,6 +42,7 @@ namespace Cornhole_Simulator_2
         Boolean changeRound = true;
         int round = 1;
         int roundFadeCycle = 255;
+        SolidBrush brushForShadows = new SolidBrush(Color.FromArgb(100, Color.Black));
 
         //initialize
         public Game()
@@ -170,6 +171,26 @@ namespace Cornhole_Simulator_2
                 else if (turn.Equals("player2")) { g.FillPolygon(Brushes.Blue, pointsForBagInHand); }
             }
 
+            //draw shadow for hand
+            int shadowOffset = 45;
+            int shadowWidthOffset = 20;
+
+            Point[] pointsForArm1Shadow = {
+                new Point(xPositionOfArm1 - positionOfHandX + 10 - 60 - (positionOfHandY / 30) - shadowOffset, yPositionOfArm1),
+                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX - 10 - 60 + (positionOfHandY / 30) - shadowOffset - shadowWidthOffset, yPositionOfArm1),
+                new Point(xPositionOfArm1 - shadowOffset - shadowWidthOffset, bottomOfArm1),
+                new Point(xPositionOfArm1 - arm1.Width / 2 - shadowOffset, bottomOfArm1),
+            };
+            Point[] pointsForArm2Shadow = {
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 - (positionOfHandY / 30) - shadowOffset, yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 + (positionOfHandY / 30) - shadowOffset - shadowWidthOffset, yPositionOfArm2),
+                new Point(xPositionOfArm2 - positionOfHandX + 65 - 60 - -(positionOfHandY / 30) - shadowOffset - shadowWidthOffset, bottomOfArm2 + 10),
+                new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + -(positionOfHandY / 30) - shadowOffset, bottomOfArm2 + 10)
+            };
+
+            //g.FillPolygon(brushForShadows, pointsForArm1Shadow);
+            //g.FillPolygon(brushForShadows, pointsForArm2Shadow);
+
             //draw bean bags
             foreach (BeanBag bag in beanBags)
             {
@@ -181,8 +202,7 @@ namespace Cornhole_Simulator_2
                 //draw shadow of bag
                 if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                 {
-                    SolidBrush colorOFShadow = new SolidBrush(Color.FromArgb(125, Color.Black));
-                    g.FillRectangle(colorOFShadow, bag.BagX + 5, bag.BagY + (50 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
+                    g.FillRectangle(brushForShadows, bag.BagX + 5, bag.BagY + (55 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
                 }
             }
         }
@@ -249,17 +269,20 @@ namespace Cornhole_Simulator_2
                 {
                     dir = "right";
                 }
-                
+
+                int bagID = 0;
+
                 if (turn.Equals("player1"))
                 {
-                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity / 1000, yVelocity / 1000, 1, dir);
-                    beanBags.Add(bagToAdd);
+                    bagID = 1;
                 }
                 else if (turn.Equals("player2"))
                 {
-                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity / 1000, yVelocity / 1000, 2, dir);
-                    beanBags.Add(bagToAdd);
+                    bagID = 2;
                 }
+
+                BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, bagID, dir);
+                beanBags.Add(bagToAdd);
 
                 pastX = 0;
                 pastY = 0;
@@ -335,8 +358,36 @@ namespace Cornhole_Simulator_2
         //calculate points after round
         private void calculatePointsAfterRound()
         {
+            int width = canvas.Width;
+            int height = canvas.Height;
+            float boardPositionX = width / 2 - board.Width * sizeOfBoard / 2;
+            float boardPositionY = positionOfSkyToGround + 5;
+            float boardWidth = board.Width * sizeOfBoard;
+            float boardHeight = board.Height * sizeOfBoard;
 
+            int player1TempScore = 0;
+            int player2TempScore = 0;
 
+            foreach (BeanBag bag in beanBags)
+            {
+                if (bag.BagX > boardPositionX && bag.BagX < boardPositionX + boardWidth)
+                {
+                    if (bag.BagY > boardPositionY && bag.BagY < boardPositionY + boardHeight)
+                    {
+                        if (bag.playerIDOfBag.Equals(1))
+                        {
+                            player1TempScore++;
+                        }
+                        else if (bag.playerIDOfBag.Equals(2))
+                        {
+                            player2TempScore++;
+                        }
+                    }
+                }
+            }
+
+            if (player1TempScore > player2TempScore) { player1Score += player1TempScore - player2TempScore; }
+            else if (player2TempScore > player1TempScore) { player2Score += player2TempScore - player1TempScore; }
 
             beanBags = new List<BeanBag>();
         }
