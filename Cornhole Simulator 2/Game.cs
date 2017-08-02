@@ -137,14 +137,14 @@ namespace Cornhole_Simulator_2
             int bottomOfArm2 = yPositionOfArm1;
 
             Point[] pointsForArm1 = {
-                new Point(xPositionOfArm1 - positionOfHandX + 10 - 60 + -(positionOfHandY / 30), yPositionOfArm1),
-                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX - 10 - 60 - -(positionOfHandY / 30), yPositionOfArm1),
-                new Point(xPositionOfArm1 + -(positionOfHandY / 30), bottomOfArm1),
-                new Point(xPositionOfArm1 - arm1.Width / 2 - -(positionOfHandY / 30), bottomOfArm1),
+                new Point(xPositionOfArm1 - positionOfHandX + 10 - 60 - (positionOfHandY / 30), yPositionOfArm1),
+                new Point(xPositionOfArm1 + arm1.Width - positionOfHandX - 10 - 60 + (positionOfHandY / 30), yPositionOfArm1),
+                new Point(xPositionOfArm1, bottomOfArm1),
+                new Point(xPositionOfArm1 - arm1.Width / 2, bottomOfArm1),
             };
             Point[] pointsForArm2 = {
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20), yPositionOfArm2),
-                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 - -(positionOfHandY / 20), yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 - (positionOfHandY / 30), yPositionOfArm2),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 + (positionOfHandY / 30), yPositionOfArm2),
                 new Point(xPositionOfArm2 - positionOfHandX + 65 - 60 - -(positionOfHandY / 30), bottomOfArm2 + 10),
                 new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + -(positionOfHandY / 30), bottomOfArm2 + 10)
             };
@@ -157,8 +157,8 @@ namespace Cornhole_Simulator_2
             {
                 new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20), yPositionOfArm2),
                 new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 - -(positionOfHandY / 20), yPositionOfArm2),
-                new Point(xPositionOfArm2 - positionOfHandX + 65 - 60 - -(positionOfHandY / 20), bottomOfArm2 + 10 - 80),
-                new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + -(positionOfHandY / 20), bottomOfArm2 + 10 - 80)
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + arm2.Width - 10 - 110 - -(positionOfHandY / 20), bottomOfArm2 + 10 - 80),
+                new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20), bottomOfArm2 + 10 - 80)
              };
 
             bagStartPositionX = (int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20);
@@ -182,7 +182,7 @@ namespace Cornhole_Simulator_2
                 if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                 {
                     SolidBrush colorOFShadow = new SolidBrush(Color.FromArgb(125, Color.Black));
-                    g.FillRectangle(colorOFShadow, bag.BagX + (30 * sizeOfBag) + (15 * sizeOfBag), bag.BagY + (30 * sizeOfBag) + (15 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
+                    g.FillRectangle(colorOFShadow, bag.BagX + 5, bag.BagY + (50 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
                 }
             }
         }
@@ -209,8 +209,8 @@ namespace Cornhole_Simulator_2
                     }
                     else
                     {
-                        xVelocity += Math.Abs(x - pastX);
-                        yVelocity += Math.Abs(y - pastY);
+                        xVelocity += -(x - pastX);
+                        yVelocity += -(y - pastY);
                     }
                 }
             }
@@ -252,12 +252,12 @@ namespace Cornhole_Simulator_2
                 
                 if (turn.Equals("player1"))
                 {
-                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, 1, dir);
+                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity / 1000, yVelocity / 1000, 1, dir);
                     beanBags.Add(bagToAdd);
                 }
                 else if (turn.Equals("player2"))
                 {
-                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, 2, dir);
+                    BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity / 1000, yVelocity / 1000, 2, dir);
                     beanBags.Add(bagToAdd);
                 }
 
