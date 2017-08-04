@@ -233,11 +233,11 @@ namespace Cornhole_Simulator_2
                     {
                         if (pastX > x)
                         {
-                            xVelocity++;
+                            xVelocity--;
                         }
                         else
                         {
-                            xVelocity--;
+                            xVelocity++;
                         }
 
                         if (pastY > y)
@@ -316,7 +316,7 @@ namespace Cornhole_Simulator_2
             //do main physics
             physicsEngine.SimulatePhysicsForBeanBags(beanBags);
 
-            //test if bag is in hole
+            //calculate if bag is in hole
             foreach (BeanBag bag in beanBags)
             {
                 if (bag.BagX > canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (23 * sizeOfBoard) && bag.BagX < canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (38 * sizeOfBoard))
@@ -393,18 +393,32 @@ namespace Cornhole_Simulator_2
 
             foreach (BeanBag bag in beanBags)
             {
-                if (bag.BagX > boardPositionX && bag.BagX < boardPositionX + boardWidth)
+                if (!bag.inHole)
                 {
-                    if (bag.BagY > boardPositionY && bag.BagY < boardPositionY + boardHeight)
+                    if (bag.BagX > boardPositionX && bag.BagX < boardPositionX + boardWidth)
                     {
-                        if (bag.playerIDOfBag.Equals(1))
+                        if (bag.BagY > boardPositionY && bag.BagY < boardPositionY + boardHeight)
                         {
-                            player1TempScore++;
+                            if (bag.playerIDOfBag.Equals(1))
+                            {
+                                player1TempScore++;
+                            }
+                            else if (bag.playerIDOfBag.Equals(2))
+                            {
+                                player2TempScore++;
+                            }
                         }
-                        else if (bag.playerIDOfBag.Equals(2))
-                        {
-                            player2TempScore++;
-                        }
+                    }
+                }
+                else
+                {
+                    if (bag.playerIDOfBag.Equals(1))
+                    {
+                        player1TempScore += 3;
+                    }
+                    else if (bag.playerIDOfBag.Equals(2))
+                    {
+                        player2TempScore += 3;
                     }
                 }
             }
