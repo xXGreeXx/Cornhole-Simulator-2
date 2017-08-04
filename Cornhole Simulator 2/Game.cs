@@ -229,8 +229,26 @@ namespace Cornhole_Simulator_2
                     }
                     else
                     {
-                        xVelocity += -(x - pastX);
-                        yVelocity += -(y - pastY);
+                        if (pastX > x)
+                        {
+                            xVelocity++;
+                        }
+                        else
+                        {
+                            xVelocity--;
+                        }
+
+                        if (pastY > y)
+                        {
+                            yVelocity++;
+                        }
+                        else
+                        {
+                            yVelocity--;
+                        }
+
+                        pastX = 0;
+                        pastY = 0;
                     }
                 }
             }
@@ -259,16 +277,6 @@ namespace Cornhole_Simulator_2
             if (started && !thrown && !changeRound)
             {
                 float z = 50.0F;
-                String dir = "left";
-
-                if (positionOfHandX < width / 2)
-                {
-                    dir = "left";
-                }
-                else
-                {
-                    dir = "right";
-                }
 
                 int bagID = 0;
 
@@ -281,7 +289,7 @@ namespace Cornhole_Simulator_2
                     bagID = 2;
                 }
 
-                BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, bagID, dir);
+                BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, bagID);
                 beanBags.Add(bagToAdd);
 
                 pastX = 0;

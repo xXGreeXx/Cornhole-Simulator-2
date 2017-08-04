@@ -16,10 +16,10 @@ namespace Cornhole_Simulator_2
         public int BagVelocityX { get; set; }
         public int BagVelocityY { get; set; }
         public int playerIDOfBag { get; set; }
-        public String directionOfBag { get; set; }
+        public Boolean inHole { get; set; }
 
         //constructor
-        public BeanBag(int x, int y, float z, int xVelocity, int yVelocity, int playerID, String direction)
+        public BeanBag(int x, int y, float z, int xVelocity, int yVelocity, int playerID, Boolean bagInHole)
         {
             BagX = x;
             BagY = y;
@@ -27,7 +27,7 @@ namespace Cornhole_Simulator_2
             BagVelocityX = xVelocity;
             BagVelocityY = yVelocity;
             playerIDOfBag = playerID;
-            directionOfBag = direction;
+            inHole = bagInHole;
         }
     }
 }

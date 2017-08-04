@@ -21,12 +21,11 @@ namespace Cornhole_Simulator_2
             {
                 if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                 {
-                    int finalVelocityX = bag.BagVelocityX / 1000;
-                    int finalVelocityY = bag.BagVelocityY / 1000;
-                    float finalVelocityZ = bag.BagVelocityY / 6500F;
+                    int finalVelocityX = bag.BagVelocityX / 6;
+                    int finalVelocityY = bag.BagVelocityY / 2;
+                    float finalVelocityZ = bag.BagVelocityY / 15F;
 
-                    if (bag.directionOfBag.Equals("left")) { bag.BagX -= finalVelocityX; }
-                    else { bag.BagX += finalVelocityX; }
+                    bag.BagX += finalVelocityX;
 
 
                     if (bag.BagY > Game.positionOfSkyToGround)
@@ -34,7 +33,7 @@ namespace Cornhole_Simulator_2
                         bag.BagY -= finalVelocityY;
                     }
 
-                    if (bag.BagZ > 20)
+                    if (bag.BagZ > 3)
                     {
                         bag.BagZ -= finalVelocityZ;
                     }
@@ -47,11 +46,11 @@ namespace Cornhole_Simulator_2
 
                 if (bag.BagVelocityX > 0)
                 {
-                    bag.BagVelocityX -= 250;
+                    bag.BagVelocityX -= 8;
                 }
                 if (bag.BagVelocityY > 0)
                 {
-                    bag.BagVelocityY -= 250;
+                    bag.BagVelocityY -= 2;
                 }
 
                 OutputBeanBags.Add(bag);
