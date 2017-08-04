@@ -23,8 +23,8 @@ namespace Cornhole_Simulator_2
                 if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                 {
                     int finalVelocityX = bag.BagVelocityX / 6;
-                    int finalVelocityY = bag.BagVelocityY / 2;
-                    float finalVelocityZ = bag.BagVelocityY / 15F;
+                    int finalVelocityY = bag.BagVelocityY / 3;
+                    float finalVelocityZ = bag.BagVelocityY / 21F;
 
                     bag.BagX += finalVelocityX;
 
@@ -51,7 +51,7 @@ namespace Cornhole_Simulator_2
                 }
                 if (bag.BagVelocityY > 0)
                 {
-                    bag.BagVelocityY -= 2;
+                    bag.BagVelocityY -= 1;
                 }
 
                 //output bag
