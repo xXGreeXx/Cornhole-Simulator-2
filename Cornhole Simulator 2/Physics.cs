@@ -19,6 +19,7 @@ namespace Cornhole_Simulator_2
 
             foreach (BeanBag bag in InputBeanBags)
             {
+                //calculate bag velocity
                 if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                 {
                     int finalVelocityX = bag.BagVelocityX / 6;
@@ -53,6 +54,7 @@ namespace Cornhole_Simulator_2
                     bag.BagVelocityY -= 2;
                 }
 
+                //output bag
                 OutputBeanBags.Add(bag);
             }
 

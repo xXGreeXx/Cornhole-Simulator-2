@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Cornhole_Simulator_2
@@ -194,15 +193,18 @@ namespace Cornhole_Simulator_2
             //draw bean bags
             foreach (BeanBag bag in beanBags)
             {
-                float sizeOfBag = 1.5F * (bag.BagZ / redBag.Width);
-
-                if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(redBag, bag.BagX, bag.BagY, redBag.Width * sizeOfBag, redBag.Height * sizeOfBag); }
-                else { g.DrawImage(blueBag, bag.BagX, bag.BagY, blueBag.Width * sizeOfBag, blueBag.Height * sizeOfBag); }
-
-                //draw shadow of bag
-                if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
+                if (!bag.inHole)
                 {
-                    g.FillRectangle(brushForShadows, bag.BagX + 5, bag.BagY + (55 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
+                    float sizeOfBag = 1.5F * (bag.BagZ / redBag.Width);
+
+                    if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(redBag, bag.BagX, bag.BagY, redBag.Width * sizeOfBag, redBag.Height * sizeOfBag); }
+                    else { g.DrawImage(blueBag, bag.BagX, bag.BagY, blueBag.Width * sizeOfBag, blueBag.Height * sizeOfBag); }
+
+                    //draw shadow of bag
+                    if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
+                    {
+                        g.FillRectangle(brushForShadows, bag.BagX + 5, bag.BagY + (55 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
+                    }
                 }
             }
         }
@@ -311,7 +313,20 @@ namespace Cornhole_Simulator_2
         //call phyics engine
         private void callPhysicsEngine()
         {
+            //do main physics
             physicsEngine.SimulatePhysicsForBeanBags(beanBags);
+
+            //test if bag is in hole
+            foreach (BeanBag bag in beanBags)
+            {
+                if (bag.BagX > canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (23 * sizeOfBoard) && bag.BagX < canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (38 * sizeOfBoard))
+                {
+                    if (bag.BagY > positionOfSkyToGround + 5 + (26 * sizeOfBoard) && bag.BagY < positionOfSkyToGround + 5 + (38 * sizeOfBoard))
+                    {
+                        bag.inHole = true;
+                    }
+                }
+            }
         }
 
         //calculate if it is the next players turn
