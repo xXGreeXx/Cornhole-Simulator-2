@@ -289,7 +289,7 @@ namespace Cornhole_Simulator_2
                     bagID = 2;
                 }
 
-                BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, bagID);
+                BeanBag bagToAdd = new BeanBag(bagStartPositionX, bagStartPositionY, z, xVelocity, yVelocity, bagID, false);
                 beanBags.Add(bagToAdd);
 
                 pastX = 0;
