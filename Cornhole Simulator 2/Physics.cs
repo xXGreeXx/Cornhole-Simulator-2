@@ -13,10 +13,8 @@ namespace Cornhole_Simulator_2
         }
 
         //simulate bag physics
-        public List<BeanBag> SimulatePhysicsForBeanBags(List<BeanBag> InputBeanBags)
+        public void SimulatePhysicsForBeanBags(List<BeanBag> InputBeanBags)
         {
-            List<BeanBag> OutputBeanBags = new List<BeanBag>();
-
             foreach (BeanBag bag in InputBeanBags)
             {
                 //calculate bag velocity
@@ -24,7 +22,7 @@ namespace Cornhole_Simulator_2
                 {
                     int finalVelocityX = bag.BagVelocityX / 6;
                     int finalVelocityY = bag.BagVelocityY / 3;
-                    float finalVelocityZ = bag.BagVelocityY / 21F;
+                    float finalVelocityZ = bag.BagVelocityY / 25F;
 
                     bag.BagX += finalVelocityX;
 
@@ -53,12 +51,7 @@ namespace Cornhole_Simulator_2
                 {
                     bag.BagVelocityY -= 1;
                 }
-
-                //output bag
-                OutputBeanBags.Add(bag);
             }
-
-            return OutputBeanBags;
         }
     }
 }

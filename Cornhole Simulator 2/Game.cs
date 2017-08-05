@@ -42,6 +42,8 @@ namespace Cornhole_Simulator_2
         int round = 1;
         int roundFadeCycle = 255;
         SolidBrush brushForShadows = new SolidBrush(Color.FromArgb(100, Color.Black));
+        String winner = "";
+        int winnerAlpha = 255;
 
         //initialize
         public Game()
@@ -93,6 +95,28 @@ namespace Cornhole_Simulator_2
                 turnFadeCycle -= 5;
             }
 
+            //draw winner text
+            if (!winner.Equals(""))
+            {
+                if (winnerAlpha >= 2)
+                {
+                    if (winner.Equals("player1"))
+                    {
+                        g.DrawString("Player One Wins!", new Font(FontFamily.GenericSansSerif, 30, FontStyle.Bold), new SolidBrush(Color.FromArgb(winnerAlpha, Color.Red)), width / 2 - 165, 140);
+                    }
+                    if (winner.Equals("player2"))
+                    {
+                        g.DrawString("Player Two Wins!", new Font(FontFamily.GenericSansSerif, 30, FontStyle.Bold), new SolidBrush(Color.FromArgb(winnerAlpha, Color.Blue)), width / 2 - 165, 140);
+                    }
+
+                    winnerAlpha -= 3;
+                }
+                else
+                {
+                    resetGame();
+                }
+            }
+
             //draw bags left
             g.DrawRectangle(Pens.Black, 2, 25, 47, 203);
             g.DrawRectangle(Pens.Black, width - blueBag.Width, 25, 47, 203);
@@ -110,7 +134,7 @@ namespace Cornhole_Simulator_2
             g.DrawString(player1Score.ToString() + "-" + player2Score.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), Brushes.Black, width / 2 - 30, 0);
 
             //draw round
-            if (changeRound && roundFadeCycle >= 4 && started)
+            if (changeRound && roundFadeCycle >= 4 && started && winner.Equals(""))
             {
                 g.DrawString("Round: " + round.ToString(), new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold), new SolidBrush(Color.FromArgb(roundFadeCycle, Color.Black)), width / 2 - 70, 150);
 
@@ -203,7 +227,7 @@ namespace Cornhole_Simulator_2
                     //draw shadow of bag
                     if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                     {
-                        g.FillRectangle(brushForShadows, bag.BagX + 5, bag.BagY + (55 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
+                        g.FillRectangle(brushForShadows, bag.BagX + 5, bag.BagY + (65 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
                     }
                 }
             }
@@ -319,11 +343,14 @@ namespace Cornhole_Simulator_2
             //calculate if bag is in hole
             foreach (BeanBag bag in beanBags)
             {
-                if (bag.BagX > canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (23 * sizeOfBoard) && bag.BagX < canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (38 * sizeOfBoard))
+                if (bag.BagVelocityY < 10)
                 {
-                    if (bag.BagY > positionOfSkyToGround + 5 + (26 * sizeOfBoard) && bag.BagY < positionOfSkyToGround + 5 + (38 * sizeOfBoard))
+                    if (bag.BagX > canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (21 * sizeOfBoard) && bag.BagX < canvas.Width / 2 - board.Width * sizeOfBoard / 2 + (37 * sizeOfBoard))
                     {
-                        bag.inHole = true;
+                        if (bag.BagY > positionOfSkyToGround + 5 + (8 * sizeOfBoard) && bag.BagY < positionOfSkyToGround + 5 + (24 * sizeOfBoard))
+                        {
+                            bag.inHole = true;
+                        }
                     }
                 }
             }
@@ -423,10 +450,37 @@ namespace Cornhole_Simulator_2
                 }
             }
 
-            if (player1TempScore > player2TempScore) { player1Score += player1TempScore - player2TempScore; }
-            else if (player2TempScore > player1TempScore) { player2Score += player2TempScore - player1TempScore; }
+            if (player1TempScore > player2TempScore) { player1Score += player1TempScore - player2TempScore; turn = "player1"; }
+            else if (player2TempScore > player1TempScore) { player2Score += player2TempScore - player1TempScore; turn = "player2"; }
+
+
+            if (player1Score >= 21)
+            {
+                winner = "player1";
+                winnerAlpha = 255;
+            }
+            else if (player2Score >= 21)
+            {
+                winner = "player2";
+                winnerAlpha = 255;
+            }
 
             beanBags = new List<BeanBag>();
+        }
+
+        //reset game handler
+        private void resetGame()
+        {
+            beanBags = new List<BeanBag>();
+            player1Score = 0;
+            player2Score = 0;
+            amountOfBagsForPlayer1 = 4;
+            amountOfBagsForPlayer2 = 4;
+            turn = "";
+            started = false;
+            round = 1;
+            changeRound = true;
+            thrown = false;
         }
     }
 }
