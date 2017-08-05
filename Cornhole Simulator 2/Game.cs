@@ -50,6 +50,10 @@ namespace Cornhole_Simulator_2
         {
             InitializeComponent();
 
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             timer.Start();
         }
 
