@@ -71,7 +71,7 @@ namespace Cornhole_Simulator_2
             int height = canvas.Height;
 
             //draw background
-            positionOfSkyToGround = (250F / 770F) * canvas.Height;
+            positionOfSkyToGround = (250F / 770F) * canvas.Height + 50;
 
             g.FillRectangle(Brushes.SkyBlue, 0, 0, width, positionOfSkyToGround);
             g.DrawImage(grass, 0, positionOfSkyToGround, width, height - positionOfSkyToGround);
@@ -225,8 +225,8 @@ namespace Cornhole_Simulator_2
                 {
                     float sizeOfBag = 1.5F * (bag.BagZ / redBag.Width);
 
-                    if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(redBag, bag.BagX, bag.BagY, redBag.Width * sizeOfBag, redBag.Height * sizeOfBag); }
-                    else { g.DrawImage(blueBag, bag.BagX, bag.BagY, blueBag.Width * sizeOfBag, blueBag.Height * sizeOfBag); }
+                    if (bag.playerIDOfBag.Equals(1)) { g.DrawImage(RotateImage(redBag, bag.BagOrientation), bag.BagX, bag.BagY, redBag.Width * sizeOfBag, redBag.Height * sizeOfBag); }
+                    else { g.DrawImage(RotateImage(blueBag, bag.BagOrientation), bag.BagX, bag.BagY, blueBag.Width * sizeOfBag, blueBag.Height * sizeOfBag); }
 
                     //draw shadow of bag
                     if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
@@ -485,6 +485,21 @@ namespace Cornhole_Simulator_2
             round = 1;
             changeRound = true;
             thrown = false;
+        }
+
+        //rotate image
+        public static Bitmap RotateImage(Image image, float angle)
+        {
+            PointF offset = new PointF((float)image.Width / 2, (float)image.Height / 2);
+            Bitmap rotatedBmp = new Bitmap(image.Width, image.Height);
+            rotatedBmp.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+            Graphics g = Graphics.FromImage(rotatedBmp);
+            g.TranslateTransform(offset.X, offset.Y);
+            g.RotateTransform(angle);
+            g.TranslateTransform(-offset.X, -offset.Y);
+            g.DrawImage(image, new PointF(0, 0));
+
+            return rotatedBmp;
         }
     }
 }

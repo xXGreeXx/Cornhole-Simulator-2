@@ -22,7 +22,7 @@ namespace Cornhole_Simulator_2
                 {
                     int finalVelocityX = bag.BagVelocityX / 6;
                     int finalVelocityY = bag.BagVelocityY / 3;
-                    float finalVelocityZ = bag.BagVelocityY / 25F;
+                    float finalVelocityZ = bag.BagVelocityY / 18F;
 
                     bag.BagX += finalVelocityX;
 
