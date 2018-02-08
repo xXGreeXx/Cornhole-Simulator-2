@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="beanBagIcon.ico" />
+    <None Include="Resources\grass.gif" />
     <None Include="Resources\arm1.png" />
     <None Include="Resources\arm2.png" />
     <None Include="Resources\redBag.png" />

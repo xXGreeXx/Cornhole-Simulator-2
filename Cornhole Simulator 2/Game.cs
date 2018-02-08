@@ -8,14 +8,26 @@ namespace Cornhole_Simulator_2
 {
     public partial class Game : Form
     {
-        //define global variables
+        //sprites
         Bitmap grass = Cornhole_Simulator_2.Properties.Resources.grass;
+        Bitmap animatedGrass = Cornhole_Simulator_2.Properties.Resources.grass1;
         Bitmap board = Cornhole_Simulator_2.Properties.Resources.cornHoleBoard;
         Bitmap blueBag = Cornhole_Simulator_2.Properties.Resources.blueBag;
         Bitmap redBag = Cornhole_Simulator_2.Properties.Resources.redBag;
         Bitmap arm1 = Cornhole_Simulator_2.Properties.Resources.arm1;
         Bitmap arm2 = Cornhole_Simulator_2.Properties.Resources.arm2;
+
+        //rendering data
         public static float positionOfSkyToGround = 0;
+        int turnFadeCycle = 255;
+        int roundFadeCycle = 255;
+        SolidBrush brushForShadows = new SolidBrush(Color.FromArgb(100, Color.Black));
+        String winner = "";
+        int winnerAlpha = 255;
+        float grassAnimationStep = 0;
+        float sizeOfBoard = 0.55F;
+
+        //game data
         int amountOfBagsForPlayer1 = 4;
         int amountOfBagsForPlayer2 = 4;
         int player1Score = 0;
@@ -26,8 +38,6 @@ namespace Cornhole_Simulator_2
         int startedCycle = 0;
         Boolean startedSwap = false;
         String turn = "";
-        int turnFadeCycle = 255;
-        float sizeOfBoard = 0.75F;
         List<BeanBag> beanBags = new List<BeanBag>();
         Boolean recordMovements = false;
         int xVelocity = 0;
@@ -40,10 +50,6 @@ namespace Cornhole_Simulator_2
         int bagStartPositionY = 0;
         Boolean changeRound = true;
         int round = 1;
-        int roundFadeCycle = 255;
-        SolidBrush brushForShadows = new SolidBrush(Color.FromArgb(100, Color.Black));
-        String winner = "";
-        int winnerAlpha = 255;
 
         //initialize
         public Game()
@@ -60,7 +66,25 @@ namespace Cornhole_Simulator_2
         //update timer tick
         private void timer_Tick(object sender, EventArgs e)
         {
+            //reload canvas
             canvas.Refresh();
+
+            //step animation
+            StepAnimation();
+        }
+
+        //step grass animation
+        private void StepAnimation()
+        {
+            grassAnimationStep += 0.07F;
+            System.Drawing.Imaging.FrameDimension dim2;
+
+            if (grassAnimationStep >= animatedGrass.GetFrameCount(new System.Drawing.Imaging.FrameDimension(animatedGrass.FrameDimensionsList[0])) - 1)
+            {
+                grassAnimationStep = 0;
+            }
+            dim2 = new System.Drawing.Imaging.FrameDimension(animatedGrass.FrameDimensionsList[0]);
+            animatedGrass.SelectActiveFrame(dim2, Convert.ToInt32(grassAnimationStep));
         }
 
         //rendering engine
@@ -75,6 +99,20 @@ namespace Cornhole_Simulator_2
 
             g.FillRectangle(Brushes.SkyBlue, 0, 0, width, positionOfSkyToGround);
             g.DrawImage(grass, 0, positionOfSkyToGround, width, height - positionOfSkyToGround);
+
+            //draw grass
+            float size = 0.4F;
+            float grassWidth = animatedGrass.Width / 5F;
+            float grassHeight = animatedGrass.Height / 5F;
+            for (float y = positionOfSkyToGround; y < height; y += grassHeight * size)
+            {
+                for (float x = 0; x < width; x += grassWidth * size)
+                {
+                    g.DrawImage(animatedGrass, x, y, grassWidth * size, grassHeight * size);
+                }
+
+                size += 0.1F;
+            }
 
             //draw board
             g.DrawImage(board, width / 2 - board.Width * sizeOfBoard / 2, positionOfSkyToGround + 5, board.Width * sizeOfBoard, board.Height * sizeOfBoard);
@@ -153,7 +191,7 @@ namespace Cornhole_Simulator_2
             callPhysicsEngine();
             calculateIfNextPlayerTurn();
 
-            //draw hand
+            //draw hand //TODO\\
             float angularSpeedIncrease = 2.05F;
 
             int xPositionOfArm1 = width / 2;
@@ -177,10 +215,10 @@ namespace Cornhole_Simulator_2
                 new Point(xPositionOfArm2 - positionOfHandX - arm1.Width / 2 + 50 - 60 + -(positionOfHandY / 30), bottomOfArm2 + 10)
             };
 
-            g.FillPolygon(new SolidBrush(Color.FromArgb(255, Color.DarkOrange.R, Color.DarkOrange.G + 30, Color.DarkOrange.B + 30)), pointsForArm1);
-            g.FillPolygon(Brushes.DarkOrange, pointsForArm2);
+            //g.FillPolygon(new SolidBrush(Color.FromArgb(255, Color.DarkOrange.R, Color.DarkOrange.G + 30, Color.DarkOrange.B + 30)), pointsForArm1);
+            //g.FillPolygon(Brushes.DarkOrange, pointsForArm2);
 
-            //draw bag in hand
+            //draw bag in hand //TODO\\
             Point[] pointsForBagInHand =
             {
                 new Point((int)(xPositionOfArm2 - (positionOfHandX * angularSpeedIncrease)) + 70 - 120 + -(positionOfHandY / 20), yPositionOfArm2),
@@ -231,7 +269,10 @@ namespace Cornhole_Simulator_2
                     //draw shadow of bag
                     if (bag.BagVelocityX > 0 || bag.BagVelocityY > 0)
                     {
-                        g.FillRectangle(brushForShadows, bag.BagX + 5, bag.BagY + (65 * sizeOfBag), redBag.Width * sizeOfBag / 1.25F, redBag.Height * sizeOfBag / 1.25F);
+                        float sizeX = redBag.Width * sizeOfBag / 1.5F;
+                        float sizeY = redBag.Height * sizeOfBag / 1.5F;
+
+                        g.FillRectangle(brushForShadows, bag.BagX - 25, bag.BagY + (65 * sizeOfBag), sizeX, sizeY);
                     }
                 }
             }
